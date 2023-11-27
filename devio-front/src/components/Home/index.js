@@ -1,7 +1,9 @@
+import Navigation from "./Navigation"
+
 export default function Home() {
   return (
     <>
-      <p>Hello world!</p>
+      <Navigation />
     </>
   )
 }
