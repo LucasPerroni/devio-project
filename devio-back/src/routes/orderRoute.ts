@@ -3,8 +3,8 @@ import { Router } from "express"
 import { createOrder } from "../controllers/orderController.js"
 import validateSchema from "../middlewares/validateSchema.js"
 
-const authRouter = Router()
+const orderRoute = Router()
 
-authRouter.post("/food", createOrder)
+orderRoute.post("/order", createOrder)
 
-export default authRouter
+export default orderRoute
