@@ -133,7 +133,7 @@ async function main() {
       ingredients: "pudim de leite.",
       price: 1000,
       image: "https://vovopalmirinha.com.br/wp-content/uploads/2016/06/pudim-1.jpg",
-      type: "sobremesa",
+      type: "sobremesas",
     },
   })
 
@@ -146,7 +146,7 @@ async function main() {
       ingredients: "pudim de leite.",
       price: 1450,
       image: "https://vovopalmirinha.com.br/wp-content/uploads/2016/06/pudim-1.jpg",
-      type: "sobremesa",
+      type: "sobremesas",
     },
   })
 
@@ -159,7 +159,7 @@ async function main() {
       ingredients: "pudim de leite.",
       price: 1850,
       image: "https://vovopalmirinha.com.br/wp-content/uploads/2016/06/pudim-1.jpg",
-      type: "sobremesa",
+      type: "sobremesas",
     },
   })
 }
