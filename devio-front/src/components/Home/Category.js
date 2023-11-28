@@ -71,6 +71,7 @@ const Option = styled.article`
   img {
     max-width: 100%;
     height: 90%;
+    border-radius: 10px;
   }
 
   p {

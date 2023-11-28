@@ -1,11 +1,15 @@
 import { styled } from "styled-components"
 
-export default function Food({ food }) {
+export default function Food({ food, setSelected }) {
+  function handleClick(f) {
+    setSelected(f)
+  }
+
   return (
     <Options>
       {food.map((f) => {
         return (
-          <Option key={f.id} className={f.type}>
+          <Option onClick={() => handleClick(f)} key={f.id} className={f.type}>
             <img src={f.image} alt={f.type} />
             <h3>{f.name}</h3>
             <p>{f.description}</p>
@@ -52,6 +56,7 @@ const Option = styled.article`
   img {
     max-width: 100%;
     height: 60%;
+    border-radius: 10px;
   }
 
   h3 {

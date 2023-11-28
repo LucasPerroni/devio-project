@@ -55,3 +55,49 @@ export const Wrapper = styled.main`
     }
   }
 `
+export const Buttons = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  margin-top: 30px;
+
+  *:not(:last-child) {
+    margin-right: 20px;
+  }
+
+  button {
+    height: 50px;
+
+    outline: none;
+    background-color: white;
+    border-radius: 10px;
+    border: 3px solid #9f9f9f;
+
+    font-size: 18px;
+    font-weight: bold;
+    color: #9f9f9f;
+
+    box-shadow: 1px 1px 6px 1px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 0 10px;
+
+    &.finalize {
+      background-color: #9f9f9f;
+      color: white !important;
+    }
+
+    &.ready {
+      border: 3px solid #125c13;
+      color: #125c13;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &.finalize.ready {
+      background-color: #125c13;
+    }
+  }
+`

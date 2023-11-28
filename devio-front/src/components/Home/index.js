@@ -6,11 +6,14 @@ import Food from "./Food"
 
 import foodRepository from "../../repositories/foodRepository"
 
-import { Wrapper } from "./styled"
+import { Buttons, Wrapper } from "./styled"
+import ChooseFood, { Log } from "./ChooseFood"
 
 export default function Home() {
   const [food, setFood] = useState([])
   const [category, setCategory] = useState("combos")
+  const [selected, setSelected] = useState(null)
+  const [cart, setCart] = useState([])
 
   useEffect(() => {
     foodRepository
@@ -18,6 +21,18 @@ export default function Home() {
       .then(({ data }) => setFood(data))
       .catch(({ response }) => console.log(response))
   }, [])
+
+  function cancel() {
+    setCart([])
+  }
+
+  function submitOrder() {}
+
+  // total price of the order
+  let total = 0
+  cart.forEach((f) => {
+    total += f.times * f.price
+  })
 
   return (
     <>
@@ -42,9 +57,52 @@ export default function Home() {
             food={food.filter(({ type }) => {
               return type === category
             })}
+            setSelected={setSelected}
           />
         </section>
+
+        {cart.length > 0 ? (
+          <Log>
+            {cart.map((f) => {
+              return (
+                <div key={f.id}>
+                  <p>
+                    {f.times}x {f.name}
+                  </p>
+                  <p>R${((f.times * f.price) / 100).toFixed(2).replace(".", ",")}</p>
+                </div>
+              )
+            })}
+
+            <span />
+
+            <p>Total do pedido:</p>
+            <h1>R${(total / 100).toFixed(2).replace(".", ",")}</h1>
+          </Log>
+        ) : (
+          <></>
+        )}
+
+        <Buttons>
+          <button onClick={cancel} className={cart.length > 0 ? "ready" : ""} disabled={cart.length === 0}>
+            Cancelar
+          </button>
+
+          <button
+            onClick={submitOrder}
+            className={`finalize ${cart.length > 0 ? "ready" : ""}`}
+            disabled={cart.length === 0}
+          >
+            Finalizar pedido
+          </button>
+        </Buttons>
       </Wrapper>
+
+      {selected ? (
+        <ChooseFood selected={selected} setSelected={setSelected} cart={cart} setCart={setCart} />
+      ) : (
+        <></>
+      )}
     </>
   )
 }
