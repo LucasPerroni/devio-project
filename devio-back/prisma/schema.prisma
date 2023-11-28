@@ -14,3 +14,40 @@ datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
 }
+
+model Food {
+    id          Int    @id @default(autoincrement())
+    name        String @unique
+    description String
+    ingredients String
+    price       Int
+    image       String
+    type        String
+
+    Order Order[]
+
+    @@map("food")
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String
+    status    Boolean
+    createdAt DateTime @default(now())
+
+    Order Order[]
+
+    @@map("user")
+}
+
+model Order {
+    id        Int      @id @default(autoincrement())
+    foodId    Int
+    userId    Int
+    createdAt DateTime @default(now())
+
+    food Food @relation(fields: [foodId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+
+    @@map("order")
+}
