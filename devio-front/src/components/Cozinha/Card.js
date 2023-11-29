@@ -2,8 +2,9 @@ import styled from "styled-components"
 
 import CloseIcon from "@mui/icons-material/Close"
 import CheckIcon from "@mui/icons-material/Check"
+import orderRepository from "../../repositories/orderRepository"
 
-export default function Card({ order, status }) {
+export default function Card({ order, status, refresh, setRefresh }) {
   const foodList = []
 
   for (let i = 0; i < order.Order.length; i++) {
@@ -14,8 +15,21 @@ export default function Card({ order, status }) {
     }
   }
 
+  function update(order) {
+    const data = {
+      id: order.id,
+      name: order.name,
+      status: !order.status,
+    }
+
+    orderRepository
+      .updateOrder(data)
+      .then(() => setRefresh(!refresh))
+      .catch(({ response }) => console.log(response))
+  }
+
   return (
-    <Main>
+    <Main className={status == "ready" ? "ready" : ""}>
       <div className="info">
         <img src={foodList[0].image} alt="haamburguer" />
         <div>
@@ -33,8 +47,8 @@ export default function Card({ order, status }) {
       </div>
 
       <div className="icons">
-        <CloseIcon className="close" />
-        {status === "ready" ? <></> : <CheckIcon className="check" />}
+        <CloseIcon className="close" onClick={() => update(order)} />
+        {status === "ready" ? <></> : <CheckIcon className="check" onClick={() => update(order)} />}
       </div>
     </Main>
   )
@@ -51,6 +65,14 @@ const Main = styled.article`
 
   border-radius: 10px;
   box-shadow: 2px 2px 6px 1px rgba(0, 0, 0, 0.2);
+
+  &.ready {
+    box-shadow: 2px 2px 6px 1px rgba(18, 166, 23, 0.5);
+
+    h2 {
+      color: rgba(18, 166, 23);
+    }
+  }
 
   img {
     max-width: 30%;
