@@ -23,6 +23,26 @@ export const Wrapper = styled.main`
     height: calc(100% - 60px);
     border-right: 3px solid #9f9f9f;
   }
+
+  &.withdraw {
+    padding: 40px 80px;
+
+    h1 {
+      font-size: 36px;
+    }
+
+    p {
+      font-weight: bold;
+      font-size: 44px;
+
+      color: #9f9f9f;
+      margin: 30px 0;
+    }
+
+    .ready {
+      color: #125c13;
+    }
+  }
 `
 
 export const Cooking = styled.section`
