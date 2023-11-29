@@ -40,6 +40,8 @@ const Header = styled.header`
   padding: 0 50px;
   background-color: #125c13;
 
+  z-index: 10;
+
   * {
     color: white;
     font-weight: bold;

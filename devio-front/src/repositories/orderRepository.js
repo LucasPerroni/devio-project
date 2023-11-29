@@ -10,9 +10,15 @@ function submitOrder(data) {
   return promise
 }
 
+function getOrders() {
+  const promise = api.get("/user")
+  return promise
+}
+
 const orderRepository = {
   getLatestCode,
   submitOrder,
+  getOrders,
 }
 
 export default orderRepository
