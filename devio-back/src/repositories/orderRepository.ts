@@ -56,6 +56,11 @@ async function updateOrder(body: UpdateOrder) {
   await prisma.user.update({ where: { id: body.id }, data: { status: body.status } })
 }
 
+async function deleteOrder(userId: number) {
+  await prisma.order.deleteMany({ where: { userId } })
+  await prisma.user.delete({ where: { id: userId } })
+}
+
 const orderRepository = {
   getLatestCode,
   getUserByCode,
@@ -65,6 +70,7 @@ const orderRepository = {
   createOrders,
   getUsers,
   updateOrder,
+  deleteOrder,
 }
 
 export default orderRepository

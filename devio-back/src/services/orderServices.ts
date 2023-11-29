@@ -59,6 +59,22 @@ async function updateOrder(body: UpdateOrder) {
   await orderRepository.updateOrder(body)
 }
 
+async function validateDeleteRequest(userId: number) {
+  if (!userId || !Number(userId)) {
+    Error.errorUnprocessable("userId must be a number")
+  }
+
+  const user = await orderRepository.getUserById(userId)
+
+  if (!user) {
+    Error.errorNotFound("Couldn't find this user")
+  }
+}
+
+async function deleteOrder(userId: number) {
+  await orderRepository.deleteOrder(userId)
+}
+
 const orderServices = {
   getLatestCode,
   getFoodById,
@@ -67,6 +83,8 @@ const orderServices = {
   getUsers,
   validateUpdateBody,
   updateOrder,
+  validateDeleteRequest,
+  deleteOrder,
 }
 
 export default orderServices

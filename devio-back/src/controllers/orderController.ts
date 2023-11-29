@@ -32,3 +32,12 @@ export async function updateOrder(req: Request, res: Response) {
 
   res.sendStatus(200)
 }
+
+export async function deleteOrder(req: Request, res: Response) {
+  const { userId } = req.params
+
+  await orderServices.validateDeleteRequest(Number(userId))
+  await orderServices.deleteOrder(Number(userId))
+
+  res.sendStatus(200)
+}
