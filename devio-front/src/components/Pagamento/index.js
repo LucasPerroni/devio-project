@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import getCartPrice from "../../utils/getCartPrice"
 
@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import { Log } from "../Home/ChooseFood"
 import { Buttons } from "../Home/styled"
 import { InputWrapper, Method, Success, Summary, Wrapper } from "./styled"
+import orderRepository from "../../repositories/orderRepository"
 
 export default function Pagamento() {
   const navigate = useNavigate()
@@ -18,8 +19,15 @@ export default function Pagamento() {
   const [method, setMethod] = useState(null)
   const [name, setName] = useState(null)
   const [change, setChange] = useState(-getCartPrice(cart))
-  const [code, setCode] = useState(200)
+  const [code, setCode] = useState("---")
   const [finished, setFinished] = useState(false)
+
+  useEffect(() => {
+    orderRepository
+      .getLatestCode()
+      .then(({ data }) => setCode(data.code + 1))
+      .catch(({ response }) => console.log(response))
+  }, [])
 
   function cancel() {
     navigate("/", { state: { cart } })
@@ -35,7 +43,7 @@ export default function Pagamento() {
     const food = []
     cart.forEach((f) => {
       for (let i = 0; i < f.times; i++) {
-        food.push(f)
+        food.push({ id: f.id })
       }
     })
 
@@ -45,7 +53,10 @@ export default function Pagamento() {
       food: food,
     }
 
-    setFinished(true)
+    orderRepository
+      .submitOrder(data)
+      .then(() => setFinished(true))
+      .catch(({ response }) => console.log(response))
   }
 
   return (
@@ -85,7 +96,7 @@ export default function Pagamento() {
 
               <div>
                 <h2>Código</h2>
-                <input defaultValue={code} disabled />
+                <input value={code} disabled />
               </div>
             </InputWrapper>
           </Summary>
