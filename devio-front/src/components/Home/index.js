@@ -16,6 +16,7 @@ export default function Home() {
   const { state } = useLocation()
 
   const [food, setFood] = useState([])
+  const [search, setSearch] = useState(null)
   const [category, setCategory] = useState("combos")
   const [selected, setSelected] = useState(null)
   const [cart, setCart] = useState(state?.cart ? state.cart : [])
@@ -44,6 +45,20 @@ export default function Home() {
     navigate("/pagamento", { state: { cart } })
   }
 
+  function searchFood(e) {
+    const text = e.target.value
+
+    if (text) {
+      setSearch([
+        ...food.filter((f) => {
+          return f.name.toLowerCase().includes(text.toLowerCase())
+        }),
+      ])
+    } else {
+      setSearch(null)
+    }
+  }
+
   return (
     <>
       <Navigation />
@@ -51,7 +66,12 @@ export default function Home() {
       <Wrapper>
         <section>
           <h1>Seja bem vindo!</h1>
-          <input placeholder="O que você procura?" type="text" disabled={loading} />
+          <input
+            onChange={(e) => searchFood(e)}
+            placeholder="O que você procura?"
+            type="text"
+            disabled={loading}
+          />
         </section>
 
         <section>
@@ -65,7 +85,7 @@ export default function Home() {
           <p>Selecione um produto para adicionar ao seu pedido</p>
           {!loading ? (
             <Food
-              food={food.filter(({ type }) => {
+              food={search ? search : food.filter(({ type }) => {
                 return type === category
               })}
               setSelected={setSelected}
