@@ -15,7 +15,20 @@ export default function Card({ order, status, refresh, setRefresh }) {
     }
   }
 
-  function update(order) {
+  function deleteOrder(order) {
+    const confirm = window.confirm(`Do you really wish to delete ${order.name}'s order?`)
+
+    if (confirm) {
+      orderRepository
+        .deleteOrder(order.id)
+        .then(() => {
+          setRefresh(!refresh)
+        })
+        .catch(({ response }) => console.log(response))
+    }
+  }
+
+  function updateOrder(order) {
     const data = {
       id: order.id,
       name: order.name,
@@ -47,8 +60,8 @@ export default function Card({ order, status, refresh, setRefresh }) {
       </div>
 
       <div className="icons">
-        <CloseIcon className="close" onClick={() => update(order)} />
-        {status === "ready" ? <></> : <CheckIcon className="check" onClick={() => update(order)} />}
+        <CloseIcon className="close" onClick={() => deleteOrder(order)} />
+        {status === "ready" ? <></> : <CheckIcon className="check" onClick={() => updateOrder(order)} />}
       </div>
     </Main>
   )

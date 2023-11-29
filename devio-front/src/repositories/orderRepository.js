@@ -20,11 +20,17 @@ function updateOrder(data) {
   return promise
 }
 
+function deleteOrder(userId) {
+  const promise = api.delete(`/order/${userId}`)
+  return promise
+}
+
 const orderRepository = {
   getLatestCode,
   submitOrder,
   getOrders,
   updateOrder,
+  deleteOrder,
 }
 
 export default orderRepository
