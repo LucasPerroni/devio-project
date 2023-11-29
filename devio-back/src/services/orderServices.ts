@@ -1,5 +1,4 @@
 import { Order } from "../schema/orderSchema.js"
-import { Food } from "@prisma/client"
 
 import { Error } from "../middlewares/errorHandler.js"
 import orderRepository from "../repositories/orderRepository.js"
@@ -38,11 +37,17 @@ async function createOrder(body: Order) {
   await orderRepository.createOrders(user, body.food)
 }
 
+async function getUsers() {
+  const users = await orderRepository.getUsers()
+  return users
+}
+
 const orderServices = {
   getLatestCode,
   getFoodById,
   validateOrderBody,
   createOrder,
+  getUsers,
 }
 
 export default orderServices

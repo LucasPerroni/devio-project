@@ -17,3 +17,8 @@ export async function createOrder(req: Request, res: Response) {
 
   res.sendStatus(201)
 }
+
+export async function getUsers(req: Request, res: Response) {
+  const users = await orderServices.getUsers()
+  res.status(200).send(users)
+}

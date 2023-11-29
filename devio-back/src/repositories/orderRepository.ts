@@ -31,12 +31,28 @@ async function createOrders(user: User, food: Pick<Food, "id">[]) {
   })
 }
 
+async function getUsers() {
+  const users = await prisma.user.findMany({
+    orderBy: { code: "asc" },
+    select: {
+      id: true,
+      name: true,
+      code: true,
+      status: true,
+      createdAt: true,
+      Order: { select: { food: true } },
+    },
+  })
+  return users
+}
+
 const orderRepository = {
   getLatestCode,
   getUserByCode,
   getFoodById,
   createUser,
   createOrders,
+  getUsers,
 }
 
 export default orderRepository
