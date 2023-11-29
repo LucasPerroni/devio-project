@@ -47,6 +47,8 @@ export default function Pagamento() {
   }
 
   function submit() {
+    setLoading(true)
+
     const food = []
     cart.forEach((f) => {
       for (let i = 0; i < f.times; i++) {
@@ -62,7 +64,10 @@ export default function Pagamento() {
 
     orderRepository
       .submitOrder(data)
-      .then(() => setFinished(true))
+      .then(() => {
+        setLoading(false)
+        setFinished(true)
+      })
       .catch(({ response }) => console.log(response))
   }
 
@@ -145,7 +150,7 @@ export default function Pagamento() {
         </div>
 
         <Buttons>
-          <button className="ready" onClick={cancel}>
+          <button className="ready" onClick={cancel} disabled={loading && name && change >= 0}>
             Cancelar
           </button>
 
