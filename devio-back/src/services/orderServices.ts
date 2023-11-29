@@ -1,4 +1,5 @@
 import { Order } from "../schema/orderSchema.js"
+import { UpdateOrder } from "../schema/updateOrderSchema.js"
 
 import { Error } from "../middlewares/errorHandler.js"
 import orderRepository from "../repositories/orderRepository.js"
@@ -42,12 +43,30 @@ async function getUsers() {
   return users
 }
 
+async function validateUpdateBody(body: UpdateOrder) {
+  const user = await orderRepository.getUserById(body.id)
+
+  if (!user) {
+    Error.errorNotFound("Couldn't find this user")
+  } else if (user.name !== body.name) {
+    Error.errorUnprocessable("This user id is from a different user")
+  } else if (user.status === body.status) {
+    Error.errorConflict("This order is already in this state")
+  }
+}
+
+async function updateOrder(body: UpdateOrder) {
+  await orderRepository.updateOrder(body)
+}
+
 const orderServices = {
   getLatestCode,
   getFoodById,
   validateOrderBody,
   createOrder,
   getUsers,
+  validateUpdateBody,
+  updateOrder,
 }
 
 export default orderServices

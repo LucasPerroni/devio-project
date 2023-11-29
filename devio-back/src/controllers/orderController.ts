@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { Order } from "../schema/orderSchema.js"
+import { UpdateOrder } from "../schema/updateOrderSchema.js"
 
 import orderServices from "../services/orderServices.js"
 
@@ -21,4 +22,13 @@ export async function createOrder(req: Request, res: Response) {
 export async function getUsers(req: Request, res: Response) {
   const users = await orderServices.getUsers()
   res.status(200).send(users)
+}
+
+export async function updateOrder(req: Request, res: Response) {
+  const body: UpdateOrder = req.body
+
+  await orderServices.validateUpdateBody(body)
+  await orderServices.updateOrder(body)
+
+  res.sendStatus(200)
 }

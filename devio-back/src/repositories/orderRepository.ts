@@ -1,5 +1,6 @@
 import { Food, User } from "@prisma/client"
 import { Order } from "../schema/orderSchema.js"
+import { UpdateOrder } from "../schema/updateOrderSchema.js"
 
 import { prisma } from "../config/database.js"
 
@@ -10,6 +11,11 @@ async function getLatestCode() {
 
 async function getUserByCode(code: number) {
   const user = await prisma.user.findFirst({ where: { code } })
+  return user
+}
+
+async function getUserById(id: number) {
+  const user = await prisma.user.findFirst({ where: { id } })
   return user
 }
 
@@ -46,13 +52,19 @@ async function getUsers() {
   return users
 }
 
+async function updateOrder(body: UpdateOrder) {
+  await prisma.user.update({ where: { id: body.id }, data: { status: body.status } })
+}
+
 const orderRepository = {
   getLatestCode,
   getUserByCode,
+  getUserById,
   getFoodById,
   createUser,
   createOrders,
   getUsers,
+  updateOrder,
 }
 
 export default orderRepository
