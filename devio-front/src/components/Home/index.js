@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import getCartPrice from "../../utils/getCartPrice"
 
 import Navigation from "./Navigation"
 import Category from "./Category"
@@ -10,12 +12,18 @@ import { Buttons, Wrapper } from "./styled"
 import ChooseFood, { Log } from "./ChooseFood"
 
 export default function Home() {
+  const { state } = useLocation()
+
   const [food, setFood] = useState([])
   const [category, setCategory] = useState("combos")
   const [selected, setSelected] = useState(null)
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState(state?.cart ? state.cart : [])
+
+  const navigate = useNavigate()
 
   useEffect(() => {
+    window.history.replaceState({}, document.title)
+
     foodRepository
       .getFood()
       .then(({ data }) => setFood(data))
@@ -26,13 +34,9 @@ export default function Home() {
     setCart([])
   }
 
-  function submitOrder() {}
-
-  // total price of the order
-  let total = 0
-  cart.forEach((f) => {
-    total += f.times * f.price
-  })
+  function submitOrder() {
+    navigate("/pagamento", { state: { cart } })
+  }
 
   return (
     <>
@@ -77,7 +81,7 @@ export default function Home() {
             <span />
 
             <p>Total do pedido:</p>
-            <h1>R${(total / 100).toFixed(2).replace(".", ",")}</h1>
+            <h1>R${(getCartPrice(cart) / 100).toFixed(2).replace(".", ",")}</h1>
           </Log>
         ) : (
           <></>

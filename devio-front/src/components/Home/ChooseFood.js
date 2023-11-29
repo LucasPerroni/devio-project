@@ -174,7 +174,7 @@ export const Log = styled.article`
   }
 
   h1 {
-    margin: 0;
+    margin: 0 !important;
     font-size: 26px;
   }
 `
