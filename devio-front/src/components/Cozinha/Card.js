@@ -2,9 +2,10 @@ import styled from "styled-components"
 
 import CloseIcon from "@mui/icons-material/Close"
 import CheckIcon from "@mui/icons-material/Check"
+
 import orderRepository from "../../repositories/orderRepository"
 
-export default function Card({ order, status, refresh, setRefresh }) {
+export default function Card({ order, status, refresh, setRefresh, loading, setLoading }) {
   const foodList = []
 
   for (let i = 0; i < order.Order.length; i++) {
@@ -19,9 +20,12 @@ export default function Card({ order, status, refresh, setRefresh }) {
     const confirm = window.confirm(`Do you really wish to delete ${order.name}'s order?`)
 
     if (confirm) {
+      setLoading(true)
+
       orderRepository
         .deleteOrder(order.id)
         .then(() => {
+          setLoading(false)
           setRefresh(!refresh)
         })
         .catch(({ response }) => console.log(response))
@@ -29,6 +33,8 @@ export default function Card({ order, status, refresh, setRefresh }) {
   }
 
   function updateOrder(order) {
+    setLoading(true)
+
     const data = {
       id: order.id,
       name: order.name,
@@ -37,7 +43,10 @@ export default function Card({ order, status, refresh, setRefresh }) {
 
     orderRepository
       .updateOrder(data)
-      .then(() => setRefresh(!refresh))
+      .then(() => {
+        setLoading(false)
+        setRefresh(!refresh)
+      })
       .catch(({ response }) => console.log(response))
   }
 
@@ -60,8 +69,19 @@ export default function Card({ order, status, refresh, setRefresh }) {
       </div>
 
       <div className="icons">
-        <CloseIcon className="close" onClick={() => deleteOrder(order)} />
-        {status === "ready" ? <></> : <CheckIcon className="check" onClick={() => updateOrder(order)} />}
+        <CloseIcon
+          className={`close ${loading ? "loading" : ""}`}
+          onClick={!loading ? () => deleteOrder(order) : null}
+        />
+
+        {status === "ready" ? (
+          <></>
+        ) : (
+          <CheckIcon
+            className={`check ${loading ? "loading" : ""}`}
+            onClick={!loading ? () => updateOrder(order) : null}
+          />
+        )}
       </div>
     </Main>
   )
@@ -126,6 +146,19 @@ const Main = styled.article`
       &:hover {
         cursor: pointer;
         font-size: 40px !important;
+      }
+    }
+
+    .loading {
+      color: #9f9f9f;
+      background-color: rgba(0, 0, 0, 0.15);
+
+      &:hover {
+        *,
+        & {
+          cursor: progress;
+          font-size: 35px !important;
+        }
       }
     }
   }

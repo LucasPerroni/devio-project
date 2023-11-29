@@ -43,6 +43,11 @@ export const Wrapper = styled.main`
       color: #125c13;
     }
   }
+
+  .loading-gif {
+    margin: auto;
+    height: 15%;
+  }
 `
 
 export const Cooking = styled.section`

@@ -7,7 +7,15 @@ export const Wrapper = styled.main`
 
   padding: 30px 60px;
 
+  .loading-gif {
+    position: absolute;
+    right: 50%;
+
+    width: 100px;
+  }
+
   section {
+    position: relative;
     margin-bottom: 40px;
 
     *:not(:last-child) {
@@ -98,6 +106,11 @@ export const Buttons = styled.section`
 
     &.finalize.ready {
       background-color: #125c13;
+    }
+
+    img {
+      margin: auto;
+      height: 90%;
     }
   }
 `

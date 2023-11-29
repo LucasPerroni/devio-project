@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import getCartPrice from "../../utils/getCartPrice"
 
 import Navigation from "../Home/Navigation"
+import Gif from "../../assets/gif/loading.gif"
 
 import CloseIcon from "@mui/icons-material/Close"
 import { Log } from "../Home/ChooseFood"
@@ -21,11 +22,17 @@ export default function Pagamento() {
   const [change, setChange] = useState(-getCartPrice(cart))
   const [code, setCode] = useState("---")
   const [finished, setFinished] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
+
     orderRepository
       .getLatestCode()
-      .then(({ data }) => setCode(data.code + 1))
+      .then(({ data }) => {
+        setCode(data.code + 1)
+        setLoading(false)
+      })
       .catch(({ response }) => console.log(response))
   }, [])
 
@@ -96,7 +103,7 @@ export default function Pagamento() {
 
               <div>
                 <h2>Código</h2>
-                <input value={code} disabled />
+                {!loading ? <input value={code} disabled /> : <input value="loading..." disabled />}
               </div>
             </InputWrapper>
           </Summary>
@@ -142,13 +149,19 @@ export default function Pagamento() {
             Cancelar
           </button>
 
-          <button
-            onClick={submit}
-            className={`finalize ${change >= 0 && name ? "ready" : ""}`}
-            disabled={change < 0 || !name}
-          >
-            Finalizar pedido
-          </button>
+          {!loading ? (
+            <button
+              onClick={submit}
+              className={`finalize ${change >= 0 && name ? "ready" : ""}`}
+              disabled={change < 0 || !name}
+            >
+              Finalizar pedido
+            </button>
+          ) : (
+            <button className="finalize">
+              <img src={Gif} alt="loading" />
+            </button>
+          )}
         </Buttons>
       </Wrapper>
 

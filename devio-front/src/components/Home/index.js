@@ -10,6 +10,7 @@ import foodRepository from "../../repositories/foodRepository"
 
 import { Buttons, Wrapper } from "./styled"
 import ChooseFood, { Log } from "./ChooseFood"
+import Gif from "../../assets/gif/loading.gif"
 
 export default function Home() {
   const { state } = useLocation()
@@ -18,15 +19,20 @@ export default function Home() {
   const [category, setCategory] = useState("combos")
   const [selected, setSelected] = useState(null)
   const [cart, setCart] = useState(state?.cart ? state.cart : [])
+  const [loading, setLoading] = useState(true)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     window.history.replaceState({}, document.title)
+    setLoading(true)
 
     foodRepository
       .getFood()
-      .then(({ data }) => setFood(data))
+      .then(({ data }) => {
+        setFood(data)
+        setLoading(false)
+      })
       .catch(({ response }) => console.log(response))
   }, [])
 
@@ -45,7 +51,7 @@ export default function Home() {
       <Wrapper>
         <section>
           <h1>Seja bem vindo!</h1>
-          <input placeholder="O que você procura?" type="text" />
+          <input placeholder="O que você procura?" type="text" disabled={loading} />
         </section>
 
         <section>
@@ -57,12 +63,16 @@ export default function Home() {
         <section>
           <h2>Produtos</h2>
           <p>Selecione um produto para adicionar ao seu pedido</p>
-          <Food
-            food={food.filter(({ type }) => {
-              return type === category
-            })}
-            setSelected={setSelected}
-          />
+          {!loading ? (
+            <Food
+              food={food.filter(({ type }) => {
+                return type === category
+              })}
+              setSelected={setSelected}
+            />
+          ) : (
+            <img src={Gif} alt="loading" className="loading-gif" />
+          )}
         </section>
 
         {cart.length > 0 ? (
@@ -87,19 +97,23 @@ export default function Home() {
           <></>
         )}
 
-        <Buttons>
-          <button onClick={cancel} className={cart.length > 0 ? "ready" : ""} disabled={cart.length === 0}>
-            Cancelar
-          </button>
+        {!loading ? (
+          <Buttons>
+            <button onClick={cancel} className={cart.length > 0 ? "ready" : ""} disabled={cart.length === 0}>
+              Cancelar
+            </button>
 
-          <button
-            onClick={submitOrder}
-            className={`finalize ${cart.length > 0 ? "ready" : ""}`}
-            disabled={cart.length === 0}
-          >
-            Finalizar pedido
-          </button>
-        </Buttons>
+            <button
+              onClick={submitOrder}
+              className={`finalize ${cart.length > 0 ? "ready" : ""}`}
+              disabled={cart.length === 0}
+            >
+              Finalizar pedido
+            </button>
+          </Buttons>
+        ) : (
+          <></>
+        )}
       </Wrapper>
 
       {selected ? (
