@@ -1,10 +1,10 @@
 import { Router } from "express"
 
-import { createOrder } from "../controllers/orderController.js"
+import { getLatestCode } from "../controllers/orderController.js"
 import validateSchema from "../middlewares/validateSchema.js"
 
 const orderRoute = Router()
 
-orderRoute.post("/order", createOrder)
+orderRoute.get("/order/code/latest", getLatestCode)
 
 export default orderRoute
